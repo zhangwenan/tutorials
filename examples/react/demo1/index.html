@@ -8,13 +8,26 @@
     <script src="../../../libs/babel-standalone-6.26.0/babel.min.js"></script>
   </head>
   <body>
+
     <div id="root"></div>
     
     <script type="text/babel">
+
+        var names = ['Jhon', 'Tom', 'Jack'];
+
       ReactDOM.render(
-        <h1>Hello, world!</h1>,
+        <div>
+            <ul>
+            {
+                names.map((name, index) => {
+                    return <li key={index}>{name}</li>
+                })
+            }
+            </ul>
+        </div>,
         document.getElementById('root')
       );
+
     </script>
     
     <!--
