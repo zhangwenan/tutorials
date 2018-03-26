@@ -15,15 +15,21 @@
 
         var names = ['Jhon', 'Tom', 'Jack'];
 
+        var cities = [
+            <li key="1">Hangzhou</li>,
+            <li key="2">Shanghai</li>,
+            <li key="3">Beijing</li>
+        ]
+
       ReactDOM.render(
         <div>
             <ul>
-            {
-                names.map((name, index) => {
-                    return <li key={index}>{name}</li>
-                })
-            }
+            {names.map((name, index) => {
+                return <li key={index}>{name}</li>
+            })}
             </ul>
+
+            <ul>{cities}</ul>
         </div>,
         document.getElementById('root')
       );
