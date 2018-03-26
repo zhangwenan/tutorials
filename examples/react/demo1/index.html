@@ -19,10 +19,19 @@
             <li key="1">Hangzhou</li>,
             <li key="2">Shanghai</li>,
             <li key="3">Beijing</li>
-        ]
+        ];
+
+        // 老的版本中，使用过React.createClass的写法
+        class HelloMessage extends React.Component{
+            render(){
+                return <h1>Hello World!{this.props.name}</h1>
+            }
+        }
 
       ReactDOM.render(
         <div>
+            <HelloMessage name={names[0]} />
+
             <ul>
             {names.map((name, index) => {
                 return <li key={index}>{name}</li>
