@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="../../../libs/react-16.2.0/umd/react.production.min.js"></script>
+    <script src="../../../libs/react-dom-16.2.0/umd/react-dom.production.min.js"></script>
+    <script src="../../../libs/babel-standalone-6.26.0/babel.min.js"></script>
+  </head>
+  <body>
+
+    <div id="root"></div>
+    
+    <script type="text/babel">
+
+        var names = ['Jhon', 'Tom', 'Jack'];
+
+        class NameList extends React.Component{
+            render(){
+                return <ul>
+                  {
+                    React.Children.map(this.props.children, (child) =>{
+                      return <li>{child}</li>
+                    })
+                  }
+                </ul>
+            }
+        }
+
+      ReactDOM.render(
+        <div>
+            <NameList>
+              <span>{names[0]}</span>
+              <span>{names[1]}</span>
+            </NameList>
+        </div>,
+        document.getElementById('root')
+      );
+
+    </script>
+    
+    <!--
+        注意:
+        关于React.Children.map可以查阅:
+        https://reactjs.org/docs/react-api.html#reactchildrenmap
+        https://reactjs.org/docs/jsx-in-depth.html#children-in-jsx
+    -->
+  </body>
+</html>
