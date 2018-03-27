@@ -27,12 +27,20 @@
             }
         }
 
+        class NameList2 extends React.Component{
+          render(){
+            return this.props.children.map((child, index)=>{
+              return <li>{child}</li>
+            });
+          }
+        }
+
       ReactDOM.render(
         <div>
-            <NameList>
+            <NameList2>
               <span>{names[0]}</span>
               <span>{names[1]}</span>
-            </NameList>
+            </NameList2>
         </div>,
         document.getElementById('root')
       );
