@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="../../../libs/react-16.2.0/umd/react.production.min.js"></script>
+    <script src="../../../libs/react-dom-16.2.0/umd/react-dom.production.min.js"></script>
+    <script src="../../../libs/babel-standalone-6.26.0/babel.min.js"></script>
+    <script src="../../../libs/jquery-3.3.1.min.js"></script>
+  </head>
+  <body>
+
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      
+      class MyComponent extends React.Component{
+
+        constructor(){
+          
+          super();
+
+          this.state = {
+            username: '',
+            lastGistUrl: ''
+          }
+        }
+
+        // 关于react的生命周期，可以查看
+        // https://reactjs.org/docs/state-and-lifecycle.html#adding-lifecycle-methods-to-a-class
+        
+        componentDidMount(){
+          $.get(this.props.source, (result)=>{
+            var lastGist = result[0];
+            this.setState({
+              username: lastGist.owner.login,
+              lastGistUrl: lastGist.html_url
+            })
+          })
+        }
+
+        render(){
+          return <div>
+            {this.state.username}'s last gist is <a href={ this.state.lastGistUrl }>here</a>.
+          </div>
+        }
+        
+      }
+
+      ReactDOM.render(
+        <div>
+            <MyComponent source="https://api.github.com/users/octocat/gists" />
+        </div>,
+        document.getElementById('root')
+      );
+
+    </script>
+    
+  </body>
+</html>
