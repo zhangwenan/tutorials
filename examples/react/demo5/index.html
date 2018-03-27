@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="../../../libs/react-16.2.0/umd/react.production.min.js"></script>
+    <script src="../../../libs/react-dom-16.2.0/umd/react-dom.production.min.js"></script>
+    <script src="../../../libs/babel-standalone-6.26.0/babel.min.js"></script>
+    <script src="../../../libs/prop-types-15.6.1/prop-types.min.js"></script>
+  </head>
+  <body>
+
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      
+      class MyComponent extends React.Component{
+
+        // 关于getInitialState方法，可以查看
+        // https://reactjs.org/docs/react-without-es6.html#setting-the-initial-state
+
+        constructor(){
+          super();
+          
+          this.state = {
+            count: 0
+          }
+        }
+
+        handleClick(){
+          this.setState({
+            count: ++this.state.count
+          })
+        }
+
+        render(){
+          return <div>
+            <p>我赞了{this.state.count}👍</p>
+            <button type="button" onClick={ this.handleClick.bind(this) }>赞</button>
+          </div>
+        }
+        
+      }
+
+      ReactDOM.render(
+        <div>
+            <MyComponent />
+        </div>,
+        document.getElementById('root')
+      );
+
+    </script>
+    
+  </body>
+</html>
