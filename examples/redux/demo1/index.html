@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+
+    <script src="../../../libs/redux-3.7.2/redux.min.js"></script>
+    <script src="../../../libs/jquery-3.3.1.min.js"></script>
+
+  </head>
+  <body>
+
+    <p>Clicked: <span id="value">0</span> times</p>
+    <button id="increment">+</button>
+    <button id="decrement">-</button>
+    <button id="incrementIfOdd">Increment if odd</button>
+    <button id="incrementAsync">Increment async</button>
+
+    
+    <script>
+      // 创建reducer
+      var counter = (state, action)=>{
+        if(typeof state === "undefined"){
+          return 0;
+        }
+
+        switch (action.type) {
+          case 'INCREMENT':
+            return state + 1;
+            break;
+
+          case 'DECREMENT':
+            return state - 1;
+            break;
+
+          default:
+            return state;
+            break;
+        }
+      }
+
+      // 以reducer为参数，创建store
+      var store = Redux.createStore(counter);
+
+      var render = ()=>{
+        $('#value').html(store.getState().toString());
+      }
+
+      render();
+      // 订阅store的变化
+      store.subscribe(render);
+
+
+      // 触发action
+      $('#increment').click((e)=>{
+        store.dispatch({
+          type: 'INCREMENT'
+        })
+      })
+
+      $('#decrement').click((e)=>{
+        store.dispatch({
+          type: 'DECREMENT'
+        })
+      })
+
+      $('#incrementIfOdd').click((e)=>{
+        if(store.getState() % 2 !== 0){
+          store.dispatch({
+            type: 'INCREMENT'
+          })
+        }
+      })
+
+      $('#incrementAsync').click((e)=>{
+        setTimeout(() => {
+          store.dispatch({
+            type: 'INCREMENT'
+          })
+        }, 1000);
+      })
+
+    </script>
+
+  </body>
+</html>
