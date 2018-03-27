@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="../../../libs/react-16.2.0/umd/react.production.min.js"></script>
+    <script src="../../../libs/react-dom-16.2.0/umd/react-dom.production.min.js"></script>
+    <script src="../../../libs/babel-standalone-6.26.0/babel.min.js"></script>
+    <script src="../../../libs/prop-types-15.6.1/prop-types.min.js"></script>
+  </head>
+  <body>
+
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      
+      class MyCompany extends React.Component{
+        render(){
+          return <div>{this.props.name}</div>
+        }
+      }
+
+      MyCompany.defaultProps = {
+        name: "MicroSoft"
+      }
+
+      MyCompany.propTypes = {
+        name: PropTypes.string.isRequired
+      }
+
+      ReactDOM.render(
+        <div>
+            <MyCompany name="apple"  />
+        </div>,
+        document.getElementById('root')
+      );
+
+      // name不传，则默认使用defaultProps中的"MicroSoft"
+    </script>
+    
+    <!--
+        注意:
+        https://github.com/facebook/prop-types
+        https://reactjs.org/docs/typechecking-with-proptypes.html#proptypes
+    -->
+  </body>
+</html>
