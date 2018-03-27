@@ -1,0 +1,1 @@
+These demos are copied From https://github.com/ruanyf/react-demos, and I rewrote it with react.js at version 16.2.0.
