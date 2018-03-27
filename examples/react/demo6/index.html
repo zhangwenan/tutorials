@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="../../../libs/react-16.2.0/umd/react.production.min.js"></script>
+    <script src="../../../libs/react-dom-16.2.0/umd/react-dom.production.min.js"></script>
+    <script src="../../../libs/babel-standalone-6.26.0/babel.min.js"></script>
+    <script src="../../../libs/prop-types-15.6.1/prop-types.min.js"></script>
+  </head>
+  <body>
+
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      
+      class MyComponent extends React.Component{
+
+        constructor(){
+          
+          super();
+
+          this.state = {
+            text: "请输入姓名"
+          }
+        }
+
+
+        // 留意e.target与e.currentTarget的区别
+        handleChange(e){
+          this.setState({
+            text: e.target.value
+          })
+        }
+
+        render(){
+          return <div>
+            <p>您的姓名是: { this.state.text }</p>
+            <input type="text" value={this.state.text} onChange={ this.handleChange.bind(this) } />
+          </div>
+        }
+        
+      }
+
+      ReactDOM.render(
+        <div>
+            <MyComponent />
+        </div>,
+        document.getElementById('root')
+      );
+
+    </script>
+    
+  </body>
+</html>
