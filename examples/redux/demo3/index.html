@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+
+    <script src="../../../libs/react-16.2.0/umd/react.production.min.js"></script>
+    <script src="../../../libs/react-dom-16.2.0/umd/react-dom.production.min.js"></script>
+    <script src="../../../libs/babel-standalone-6.26.0/babel.min.js"></script>
+    <script src="../../../libs/prop-types-15.6.1/prop-types.min.js"></script>
+    <script src="../../../libs/redux-3.7.2/redux.min.js"></script>
+    <script src="../../../libs/react-redux-5.0.7/react-redux.min.js"></script>
+    <script src="../../../libs/jquery-3.3.1.min.js"></script>
+
+  </head>
+  <body>
+    
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      let nextTodoId = 0;
+
+      const addTodo = text => ({
+        type: 'ADD_TODO',
+        id: nextTodoId++,
+        text
+      });
+
+      const setVisibilityFilter = filter => ({
+        type: 'SET_VISIBILITY_FILTER',
+        filter
+      })
+
+      const toggleTodo = id => ({
+        type: 'TOGGLE_TODO',
+        id
+      })
+
+      const VisibilityFilters = {
+        SHOW_ALL: 'SHOW_ALL',
+        SHOW_COMPLETED: 'SHOW_COMPLETED',
+        SHOW_ACTIVE: 'SHOW_ACTIVE'
+      }
+    </script>
+
+    <script type="text/babel">
+      const visibilityFilter = (state = 'SHOW_ALL', action) => {
+        switch (action.type) {
+          case 'SET_VISIBILITY_FILTER':
+            return action.filter
+            break;
+        
+          default:
+            return state
+            break;
+        }
+      }
+
+      const todos = (state=[], action) => {
+        switch(action.type){
+          case 'ADD_TODO':
+            return [
+              ...state,
+              {
+                id: action.id,
+                text: action.text,
+                completed: false
+              }
+            ]
+          break;
+
+          case 'TOGGLE_TODO':
+              return state.map(todo=>(
+                (todo.id === action.id) ? 
+                {...todo, completed: !todo.completed} :
+                todo
+              ))
+          break;
+
+          default:
+          return state;
+          break;
+        }
+      }
+
+      let rootReducer = Redux.combineReducers({
+        todos,
+        visibilityFilter
+      })
+    </script>
+
+    <script type="text/babel">
+      const Todo = ({ onClick, completed, text }) => (
+        <li
+          onClick={onClick}
+          style={{
+            textDecoration: completed ? 'line-through' : 'none'
+          }}
+        >
+          {text}
+        </li>
+      )
+
+      Todo.propTypes = {
+        onClick: PropTypes.func.isRequired,
+        completed: PropTypes.bool.isRequired,
+        text: PropTypes.string.isRequired
+      }
+
+
+      const TodoList = ({ todos, toggleTodo }) => (
+        <ul>
+          {todos.map(todo =>
+            <Todo
+              key={todo.id}
+              {...todo}
+              onClick={() => toggleTodo(todo.id)}
+            />
+          )}
+        </ul>
+      )
+
+      TodoList.propTypes = {
+        todos: PropTypes.arrayOf(PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          completed: PropTypes.bool.isRequired,
+          text: PropTypes.string.isRequired
+        }).isRequired).isRequired,
+        toggleTodo: PropTypes.func.isRequired
+      }
+
+
+      const Link = ({ active, children, onClick }) => (
+          <button
+            onClick={onClick}
+            disabled={active}
+            style={{
+                marginLeft: '4px',
+            }}
+          >
+            {children}
+          </button>
+      )
+
+      Link.propTypes = {
+        active: PropTypes.bool.isRequired,
+        children: PropTypes.node.isRequired,
+        onClick: PropTypes.func.isRequired
+      }
+
+
+      const Footer = () => (
+        <div>
+          <span>Show: </span>
+          <FilterLink filter={VisibilityFilters.SHOW_ALL}>
+            All
+          </FilterLink>
+          <FilterLink filter={VisibilityFilters.SHOW_ACTIVE}>
+            Active
+          </FilterLink>
+          <FilterLink filter={VisibilityFilters.SHOW_COMPLETED}>
+            Completed
+          </FilterLink>
+        </div>
+      )
+
+      const App = () => (
+        <div>
+          <AddTodo />
+          <VisibleTodoList />
+          <Footer />
+        </div>
+      )
+    </script>
+
+    <script type="text/babel">
+    const AddTodo = ({ dispatch }) => {
+      let input
+
+      return (
+        <div>
+          <form onSubmit={e => {
+            e.preventDefault()
+            if (!input.value.trim()) {
+              return
+            }
+            store.dispatch(addTodo(input.value))
+            input.value = ''
+          }}>
+            <input ref={node => input = node} />
+            <button type="submit">
+              Add Todo
+            </button>
+          </form>
+        </div>
+      )
+    }
+
+    ReactRedux.connect()(AddTodo)
+
+    const mapStateToProps3 = (state, ownProps) => ({
+      active: ownProps.filter === state.visibilityFilter
+    })
+
+    const mapDispatchToProps3 = (dispatch, ownProps) => ({
+      onClick: () => dispatch(setVisibilityFilter(ownProps.filter))
+    })
+
+    let FilterLink = ReactRedux.connect(
+      mapStateToProps3,
+      mapDispatchToProps3
+    )(Link)
+
+
+
+    const getVisibleTodos = (todos, filter) => {
+      switch (filter) {
+        case 'SHOW_ALL':
+          return todos
+        case 'SHOW_COMPLETED':
+          return todos.filter(t => t.completed)
+        case 'SHOW_ACTIVE':
+          return todos.filter(t => !t.completed)
+        default:
+          throw new Error('Unknown filter: ' + filter)
+      }
+    }
+
+    const mapStateToProps2 = state => ({
+      todos: getVisibleTodos(state.todos, state.visibilityFilter)
+    })
+
+    const mapDispatchToProps2 = dispatch => ({
+      toggleTodo: id => dispatch(toggleTodo(id))
+    })
+
+    let VisibleTodoList = ReactRedux.connect(
+      mapStateToProps2,
+      mapDispatchToProps2
+    )(TodoList)
+    </script>
+
+    <script type="text/babel">
+      const store = Redux.createStore(rootReducer)
+
+      ReactDOM.render(
+        <ReactRedux.Provider store={store}>
+          <App />
+        </ReactRedux.Provider>,
+        document.getElementById('root')
+      )
+    </script>
+
+  </body>
+</html>
