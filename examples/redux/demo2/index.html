@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+
+    <script src="../../../libs/react-16.2.0/umd/react.production.min.js"></script>
+    <script src="../../../libs/react-dom-16.2.0/umd/react-dom.production.min.js"></script>
+    <script src="../../../libs/babel-standalone-6.26.0/babel.min.js"></script>
+    <script src="../../../libs/prop-types-15.6.1/prop-types.min.js"></script>
+    <script src="../../../libs/redux-3.7.2/redux.min.js"></script>
+    <script src="../../../libs/jquery-3.3.1.min.js"></script>
+
+  </head>
+  <body>
+    
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      class Counter extends React.Component{
+        constructor(){
+          super();
+
+          this.incrementAsync = this.incrementAsync.bind(this);
+          this.incrementIfOdd = this.incrementIfOdd.bind(this);
+        }
+
+        incrementIfOdd(){
+          if(this.props.value %2 !== 0){
+            this.props.onIncrement();
+          }
+        }
+
+        incrementAsync(){
+          setTimeout(this.props.onIncrement, 1000);
+        }
+
+        render(){
+          const { value, onIncrement, onDecrement } = this.props;
+          return (
+            <p>
+              Clicked: {value} times
+              {' '}
+              <button onClick={onIncrement}>+</button>
+              {' '}
+              <button onClick={onDecrement}>-</button>
+              {' '}
+              <button onClick={this.incrementIfOdd}>Increment if odd</button>
+              {' '}
+              <button onClick={this.incrementAsync}>Increment async</button>
+            </p>
+          )
+        }
+      }
+
+      Counter.propTypes = {
+        value: PropTypes.number.isRequired,
+        onIncrement: PropTypes.func.isRequired,
+        onDecrement: PropTypes.func.isRequired
+      }
+
+      var reducer = (state = 0, action) =>{
+        switch (action.type) {
+          case 'INCREMENT':
+            return state + 1;
+            break;
+          case 'DECREMENT':
+            return state - 1;
+            break;
+        
+          default:
+            return state;
+            break;
+        }
+      }
+
+      var store = Redux.createStore(reducer);
+
+      const render = ()=> ReactDOM.render(
+        <Counter 
+          value={store.getState()}
+          onIncrement={()=> store.dispatch({ type: 'INCREMENT'})}
+          onDecrement={()=> store.dispatch({ type: 'DECREMENT'})}
+        />,
+        document.getElementById('root')
+      )
+      
+
+      render();
+      store.subscribe(render);
+
+    </script>
+
+  </body>
+</html>
